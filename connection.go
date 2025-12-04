@@ -6,6 +6,7 @@ import (
 	"context"
 	"encoding/json"
 	"errors"
+	"fmt"
 	"io"
 	"log/slog"
 	"sync"
@@ -80,6 +81,7 @@ func (c *Connection) receive() {
 
 	for scanner.Scan() {
 		line := scanner.Bytes()
+		fmt.Printf("Received line: %s\n", string(line))
 		if len(bytes.TrimSpace(line)) == 0 {
 			continue
 		}
