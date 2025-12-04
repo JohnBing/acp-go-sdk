@@ -179,18 +179,23 @@ func main() {
 	if *debug {
 		args = append(args, "--debug")
 	}
-
+	fmt.Printf("Starting Gemini with args: %v\n", args)
 	ctx, cancel := context.WithCancel(context.Background())
 	defer cancel()
 
 	cmd := exec.CommandContext(ctx, *binary, args...)
+	fmt.Printf("Starting Gemini with args1: %v\n", args)
 	cmd.Stderr = os.Stderr
 	stdin, err := cmd.StdinPipe()
+	fmt.Printf("Starting Gemini with args2: \n")
+
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "stdin pipe error: %v\n", err)
 		os.Exit(1)
 	}
 	stdout, err := cmd.StdoutPipe()
+	fmt.Printf("Starting Gemini with args3: \n")
+
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "stdout pipe error: %v\n", err)
 		os.Exit(1)
@@ -200,6 +205,7 @@ func main() {
 		fmt.Fprintf(os.Stderr, "failed to start Gemini: %v\n", err)
 		os.Exit(1)
 	}
+	fmt.Printf("Starting Gemini with args4: \n")
 
 	client := &replClient{autoApprove: *yolo}
 	conn := acp.NewClientSideConnection(client, stdin, stdout)
@@ -213,6 +219,7 @@ func main() {
 			Terminal: true,
 		},
 	})
+	fmt.Printf("Starting Gemini with args5: \n")
 	if err != nil {
 		if re, ok := err.(*acp.RequestError); ok {
 			if b, mErr := json.MarshalIndent(re, "", "  "); mErr == nil {
