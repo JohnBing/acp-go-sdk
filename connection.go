@@ -179,18 +179,19 @@ func SendRequest[T any](c *Connection, ctx context.Context, method string, param
 	if err != nil {
 		return result, err
 	}
-
+	dd, _ := json.Marshal(msg)
+	fmt.Printf("SendRequest msg: %s\n", msg)
 	pr := &pendingResponse{ch: make(chan anyMessage, 1)}
 	c.mu.Lock()
 	c.pending[idKey] = pr
 	c.mu.Unlock()
-	fmt.Printf("sendMessage msg: %v\n", msg)
+	fmt.Printf("sendMessage msg: %s\n", string(dd))
 	if err := c.sendMessage(msg); err != nil {
 		fmt.Printf("sendMessage error: %v\n", err)
 		c.cleanupPending(idKey)
 		return result, NewInternalError(map[string]any{"error": err.Error()})
 	}
-	fmt.Printf("sendMessage msg success: %v\n", msg)
+	fmt.Printf("sendMessage msg success: %v\n", string(dd))
 
 	resp, err := c.waitForResponse(ctx, pr, idKey)
 	if err != nil {
