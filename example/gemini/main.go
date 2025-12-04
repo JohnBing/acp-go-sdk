@@ -215,8 +215,8 @@ func main() {
 	initResp, err := conn.Initialize(ctx, acp.InitializeRequest{
 		ProtocolVersion: acp.ProtocolVersionNumber,
 		ClientCapabilities: acp.ClientCapabilities{
-			Fs:       acp.FileSystemCapability{ReadTextFile: true, WriteTextFile: true},
-			Terminal: true,
+			Fs:       acp.FileSystemCapability{ReadTextFile: false, WriteTextFile: false},
+			Terminal: false,
 		},
 	})
 	fmt.Printf("Starting Gemini with args5: \n")
