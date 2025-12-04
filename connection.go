@@ -184,11 +184,13 @@ func SendRequest[T any](c *Connection, ctx context.Context, method string, param
 	c.mu.Lock()
 	c.pending[idKey] = pr
 	c.mu.Unlock()
-
+	fmt.Printf("sendMessage msg: %v\n", msg)
 	if err := c.sendMessage(msg); err != nil {
+		fmt.Printf("sendMessage error: %v\n", err)
 		c.cleanupPending(idKey)
 		return result, NewInternalError(map[string]any{"error": err.Error()})
 	}
+	fmt.Printf("sendMessage msg success: %v\n", msg)
 
 	resp, err := c.waitForResponse(ctx, pr, idKey)
 	if err != nil {
